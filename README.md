@@ -8,9 +8,9 @@ It can be used as a self-hosted Git service, or (COMING SOON) on our cloud servi
 
 Clone this repo and simply run:
 
-'docker-compose up -d'
+`docker-compose up -d`
 
-then visit 'localhost:3000' on your browser to see a local version in action. 
+then visit `localhost:3000` on your browser to see a local version in action. 
 
 As Gitea is written in Go, it works across **all** the platforms and
 architectures that are supported by Go, including Linux, macOS, and
