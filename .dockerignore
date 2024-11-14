@@ -55,9 +55,6 @@ cpu.out
 
 /bin
 /dist
-/custom/*
-!/custom/conf
-/custom/conf/*
 !/custom/conf/app.example.ini
 /data
 /indexers
@@ -113,3 +110,11 @@ prime/
 
 # Manpage
 /man
+
+# Idk ChatGPT told me to add these things below to fix a problem I had with docker-compose not building
+postgres
+git3d
+.git
+*.log
+node_modules
+*.tmp

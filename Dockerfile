@@ -73,7 +73,7 @@ RUN addgroup \
   echo "git:*" | chpasswd -e
 
 ENV USER=git
-ENV GITEA_CUSTOM=/data/gitea
+ENV GITEA_CUSTOM=/app/gitea/custom
 
 VOLUME ["/data"]
 
@@ -84,3 +84,8 @@ COPY --from=build-env /tmp/local /
 COPY --from=build-env /go/src/code.gitea.io/gitea/gitea /app/gitea/gitea
 COPY --from=build-env /go/src/code.gitea.io/gitea/environment-to-ini /usr/local/bin/environment-to-ini
 COPY --from=build-env /go/src/code.gitea.io/gitea/contrib/autocompletion/bash_autocomplete /etc/profile.d/gitea_bash_autocomplete.sh
+COPY custom /app/gitea/custom
+
+# Overwrite custom logo and favicon - for some reason just keeping these in custom doesn't work
+COPY custom/public/assets/img/logo.svg /usr/local/share/gitea/public/assets/img/logo.svg
+COPY custom/public/assets/img/favicon.svg /usr/local/share/gitea/public/assets/img/favicon.svg

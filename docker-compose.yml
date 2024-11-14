@@ -1,0 +1,56 @@
+version: '3.8'  # Updated version for compatibility with healthcheck conditions
+
+# Define named volumes for data persistence
+volumes:
+  git3d_data:
+  postgres_data:
+
+networks:
+  gitea:
+    external: false
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: git3d
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      # Database configuration
+      - GITEA__database__DB_TYPE=postgres
+      - GITEA__database__HOST=db:5432
+      - GITEA__database__NAME=git3d
+      - GITEA__database__USER=git3d
+      - GITEA__database__PASSWD=git3d
+    restart: always
+    networks:
+      - gitea
+    volumes:
+      - git3d_data:/data  # Use named volume instead of host directory
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"  # HTTP port
+      - "222:22"     # SSH port mapped to 222 on host
+    depends_on:
+      db:
+        condition: service_healthy  # Wait until db service passes healthcheck
+
+  db:
+    image: postgres:14
+    restart: always
+    environment:
+      - POSTGRES_USER=git3d
+      - POSTGRES_PASSWORD=git3d
+      - POSTGRES_DB=git3d
+    networks:
+      - gitea
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Use named volume
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U git3d -d git3d"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
