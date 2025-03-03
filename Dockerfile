@@ -44,7 +44,7 @@ RUN chmod 644 /go/src/code.gitea.io/gitea/contrib/autocompletion/bash_autocomple
 FROM docker.io/library/alpine:3.20
 LABEL maintainer="maintainers@gitea.io"
 
-EXPOSE 22 3000
+EXPOSE 3000
 
 RUN apk --no-cache add \
     bash \
